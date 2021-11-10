@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Seopstagram</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="shortcut icon" href="/imgs/instagram.png">
+</head>
+<body>
+<section id="container">
+    <div id="main_container">
+        <div class="form_container">
+            <div class="form">
+                <h1 class="sprite_insta_big_logo title"></h1>
+                <form action="/login.action" method="post" class="login-form">
+                    <p class="login_user_name">
+                        <label for="user_name">사용자명:</label>
+                        <input type="text" id="user_name" name="username">
+                    </p>
+
+                    <p class="login_user_password">
+                        <label for="user_password">비밀번호:</label>
+                        <input type="password" id="user_password" name="password">
+                    </p>
+                    <input type="button" id="submit_btn" value="로그인" class="submit_btn" onclick="loginAction();">
+                </form>
+            </div>
+
+            <div class="bottom_box">
+                <div>
+                    <span>아이디가 없으신가요?</span><a href="/signup">회원가입</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/js/cookie.js"></script>
+<script>
+    const loadAction = function () {
+        if(this.responseText != "false"){
+            setCookie("Authorization", "Bearer " + this.responseText, 7);
+            window.location.href = "/";
+        }else{
+            alert('아이디 혹은 비밀번호가 틀립니다.');
+            document.querySelector('#user_name').value = null;
+            document.querySelector('#user_password').value = null;
+        }
+    }
+    const loginAction = () => {
+        const xrh = new XMLHttpRequest();
+        xrh.addEventListener('load', loadAction);
+        xrh.open('POST', "/login.action");
+        xrh.send(new FormData(document.getElementsByClassName("login-form")[0]));
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Seopstagram</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/profile.css">
+    <link rel="shortcut icon" href="/imgs/instagram.png">
+
+    <!--  Awesome font  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<section id="container">
+    <header th:insert="menu.html"></header>
+
+    <div id="main_container">
+        <section class="b_inner">
+            <div class="hori_cont">
+                <div class="profile_wrap">
+                    <div class="profile_img">
+                        <img th:attr="src=${userprofileimg} , alt='프로필사진'">
+                    </div>
+                </div>
+
+                <div class="detail">
+                    <div class="top">
+                        <div class="user_name" th:text="${usernick}"></div> <!-- 유저 닉네임  ok-->
+                        <input hidden="hidden" th:value="${memberid}" id="memberid">
+                        <div class="follow-wrap">
+                            <a href="#" class="follow">
+                                <div class="follow_div">
+                                    팔로우
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <ul class="middle">
+                        <li>
+                            <span>게시물</span>
+                            <span th:text="${board_count}"></span>
+                        </li>
+                        <li>
+                            <span>팔로워</span>
+                            <span th:text="${follower_count}"></span>
+                        </li>
+                        <li>
+                            <span>팔로우</span>
+                            <span th:text="${following_count}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- div each -->
+            <div th:each="board: ${boards}" class="contents_container">
+                <div class="pic">
+                    <img th:attr="src=${board.postimg}, alt='올린 사진'">
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+<script>
+    $.ajax({
+       url: '/follow_check',
+       method: 'get',
+       data: {
+            memberid : document.querySelector("#memberid").value
+       },
+       success: function (res){
+           if(res){
+               $(".follow-wrap").html(
+                   `<a href="#" class="unfollow" onclick="unfollow();">
+                                <div class="follow_div">
+                                    <i class="fa fa-check"></i>팔로우 완료
+                                </div>
+                            </a>`
+               );
+           }else{
+               $(".follow-wrap").html(
+                   `<a href="#" class="follow" onclick="follow();">
+                                <div class="follow_div">
+                                    팔로우
+                                </div>
+                            </a>`
+               );
+           }
+       }
+    });
+    const follow = function (){
+        $.ajax({
+            url: '/follow',
+            method: 'post',
+            data:{
+                targetid: document.getElementById('memberid').value
+            },
+            success: function (res){
+                $(".follow-wrap").html(
+                    `<a href="#" class="unfollow" onclick="unfollow();">
+                                <div class="follow_div">
+                                    <i class="fa fa-check"></i>팔로우 완료
+                                </div>
+                            </a>`
+                );
+            }
+        });
+    };
+
+    const unfollow = function (){
+        $.ajax({
+            url: '/unfollow',
+            method: 'post',
+            data: {
+                targetid: document.getElementById('memberid').value
+            },
+            success: function (res){
+                $(".follow-wrap").html(
+                    `<a href="#" class="follow" onclick="follow();">
+                                <div class="follow_div">
+                                    팔로우
+                                </div>
+                            </a>`
+                );
+            }
+        });
+    };
+</script>
+</body>
+</html>

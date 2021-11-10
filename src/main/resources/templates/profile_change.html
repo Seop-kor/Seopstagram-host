@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Seopstagram</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/new_post.css">
+    <link rel="shortcut icon" href="/imgs/instagram.png">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<section id="container">
+    <div id="main_container">
+        <div class="post_form_container">
+            <form action="/profile_change.action" method="post" class="post_form">
+                <div class="title">
+                    설정창
+                </div>
+                <div class="preview">
+                    <div class="upload">
+                        <div>
+                            <div class="plus_icon" id="input-file-trigger">
+                                <span>
+                                </span>
+                                <span></span>
+                            </div>
+                            <canvas id="imageCanvas"></canvas>
+                        </div>
+                    </div>
+                    <input type="file" hidden="hidden" id="id_photo" name="userprofileimg">
+                    <span>닉네임 <input type="text" name="usernick" placeholder="usernick 들어갈 자리"> <button type="button">중복확인</button></span>
+                    <span class="nickcheck" style="visibility: collapse"></span>
+
+                    <button type="button" class="submit_btn" onclick="successChange();">수정</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script>
+    let fileInput = document.querySelector("#id_photo");
+    fileInput.addEventListener('change', handleImage, false);
+    let canvas = document.getElementById('imageCanvas');
+    let ctx = canvas.getContext('2d');
+    let imageinfo;
+
+    $("#input-file-trigger").click(function(e){
+        e.preventDefault();
+        $("#id_photo").click();
+    });
+
+    function handleImage(e){
+        let reader = new FileReader();
+        reader.onload = function(event){
+            let img = new Image();
+            img.onload = function(){
+                canvas.width = 300;
+                canvas.height = 300;
+                ctx.drawImage(img,0,0,300,300);
+            };
+            img.src = event.target.result;
+        };
+        imageinfo = e.target.files[0];
+        reader.readAsDataURL(e.target.files[0]);
+    }
+
+    let successChange = () => {
+        let formdata = new FormData();
+        formdata.append("file",imageinfo);
+        $.ajax({
+            type: 'post',
+            url: '/profileimg.action',
+            data: formdata,
+            processData: false,
+            contentType: false,
+        }).done(function(data){
+            if(data === true){
+                $(".post_form").submit();
+            }
+        });
+    }
+</script>
+</body>
+</html>

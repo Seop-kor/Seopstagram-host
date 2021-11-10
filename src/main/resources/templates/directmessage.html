@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>받은 메시지함 Direct</title>
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="shortcut icon" href="/imgs/instagram.png">
+    <link rel="stylesheet" href="/css/dmstyle.css">
+</head>
+<body>
+<section id="container">
+    <header th:replace="menu.html"></header>
+    <div id="main_container">
+        <div>
+            <!-- Direct 텍스트 부분 -->
+            <div class="direct-text-container">
+                <div class="direct-text-under">
+                    <div class="blank"></div>
+                    <div class="blank-right">Direct</div>
+                </div>
+                <div th:each="dmfollow : ${followlist}">
+                    <div>
+                        <div id="memberimg">
+                            <img th:src="${dmfollow.userprofileimg}">
+                        </div>
+                        <div th:text="${dmfollow.usernick}">
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </div>
+            <!-- Message 온 부분 -->
+            <div>
+
+            </div>
+        </div>
+
+        <!-- Message 보여주는 창 -->
+        <div>
+
+        </div>
+    </div>
+</section>
+</body>
+</html>

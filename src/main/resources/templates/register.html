@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Seopstagram</title>
+    <link rel="shortcut icon" href="/imgs/instagram.png">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<section id="container">
+
+    <div id="main_container">
+        <div class="form_container">
+            <div class="form">
+                <h1 class="sprite_insta_big_logo"></h1>
+                <form action="/signup.action" method="post" id="formsub">
+                    <p class="login_user_id">
+                        <label for="userid">
+                            아이디:
+                        </label>
+                        <input type="text" id="userid" name="userid">
+                        <button type="button" id="idcheck" onclick="idcheckg()">중복확인</button>
+                    </p>
+                    <p id="idcheckequal" style="visibility: collapse; font-size: 10px;">
+                        <span id="idcheckequaltext"></span>
+                    </p>
+
+                    <p class="login_user_password">
+                        <label for="userpass">
+                            비밀번호:
+                        </label>
+                        <input type="password" id="userpass" name="userpass">
+                    </p>
+
+                    <p class="login_user_passcheck">
+                        <label for="userpasscheck">
+                            비밀번호 확인:
+                        </label>
+                        <input type="password" id="userpasscheck" onchange="passcheck()">
+                    </p>
+                    <p id="passcheckeqaul" style="visibility: collapse; font-size: 10px;">
+                        <span id="passcheckequaltext"></span>
+                    </p>
+
+                    <input type="button" id="submit_btn" value="회원가입" class="submit_btn" onclick="check()">
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    let idchecksuccess = false;
+    let passchecksuccess = false;
+    const idcheckg = function idcheck(){
+        const id = document.getElementById("userid").value;
+        $.ajax({
+            url: "/idcheck",
+            data: {id: id},
+            method: "GET",
+        }).done(function(data){
+            if(data){
+                idchecksuccess = true;
+                $("#idcheckequal").css("visibility","visible");
+                $("#idcheckequal").css("color","green");
+                $("#idcheckequaltext").text("아이디가 중복되지않습니다.");
+            }else{
+                idchecksuccess = false;
+                $("#idcheckequal").css("visibility","visible");
+                $("#idcheckequal").css("color","red");
+                $("#idcheckequaltext").text("아이디가 중복됩니다.");
+            }
+        });
+    };
+
+    function passcheck() {
+        const pass = document.getElementById("userpass").value;
+        const passcheck = document.getElementById("userpasscheck").value;
+        if(pass === passcheck){
+            passchecksuccess = true;
+            $("#passcheckeqaul").css("visibility","visible");
+            $("#passcheckeqaul").css("color","green");
+            $("#passcheckequaltext").text("비밀번호가 일치합니다.");
+        }else{
+            passchecksuccess = false;
+            $("#passcheckeqaul").css("visibility","visible");
+            $("#passcheckeqaul").css("color","red");
+            $("#passcheckequaltext").text("비밀번호가 일치하지않습니다.");
+        }
+    }
+
+    function check(){
+        if(!idchecksuccess){
+            alert("아이디 중복체크를 해주세요");
+            return;
+        }
+        if(!passchecksuccess){
+            alert("비밀번호가 일치하지않습니다.");
+            return;
+        }
+        document.getElementById("formsub").submit();
+    }
+</script>
+</body>
+</html>

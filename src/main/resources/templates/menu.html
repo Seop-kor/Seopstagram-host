@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>header</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<header id="header">
+    <section class="inner">
+        <h1 class="logo">
+            <a href="/">
+                <div class="sprite_insta_icon"></div>
+                <div class="sprite_write_logo"></div>
+            </a>
+        </h1>
+
+        <div class="search_box">
+            <form action="/find" method="get" id="searchform">
+                <input type="text" placeholder="검색" id="search-field" name="usernick">
+                <div class="fake_field">
+                    <span class="sprite_small_search_icon"></span>
+                    <span>검색</span>
+                </div>
+            </form>
+        </div>
+
+        <div class="right_icons">
+            <a id="post" href="/post"><div class="sprite_camera_icon"></div></a>
+            <a id="dm" href="#"><div class="sprite_bubble_icon"></div></a>
+            <a id="profile" href="/profile"><div class="sprite_user_icon_outline"></div></a>
+        </div>
+    </section>
+</header>
+<script>
+    $("#search-field").keydown(function (key){
+        if(key.keyCode === 13){
+            // const id = $("#search-field").value();
+            // $.ajax("http://localhost:8080/find?id="+id).done(function(data){
+            //     if(data === true){
+            //         location.href='searchuser.html';
+            //     }
+            // });
+            document.getElementById('searchform').submit();
+        }
+    });
+</script>
+</body>
+</html>

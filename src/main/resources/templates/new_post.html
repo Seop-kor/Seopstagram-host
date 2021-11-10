@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Seopstagram</title>
+
+    <!-- Facebook Meta Tags / 페이스북 오픈 그래프 -->
+    <meta property="og:url" content="#">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="instagram">
+    <meta property="og:description" content="instagram clone">
+    <meta property="og:image" content="#">
+
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/new_post.css">
+    <link rel="shortcut icon" href="/imgs/instagram.png">
+</head>
+<body>
+<section id="container">
+    <header th:replace="menu.html"></header>
+
+    <div id="main_container">
+        <div class="post_form_container">
+            <form action="/post.action" method="post" class="post_form">
+                <div class="title">
+                    NEW POST
+                </div>
+                <div class="preview">
+                    <div class="upload">
+                        <div class="post_btn">
+                            <div class="plus_icon" id="input-file-trigger">
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <p>포스트 이미지 추가</p>
+                            <canvas id="imageCanvas"></canvas>
+                            <!--<p><img id="img_id" src="#" style="width: 300px; height: 300px; object-fit: cover" alt="thumbnail"></p>-->
+                        </div>
+                    </div>
+                    <br>
+                    <p>
+                        <input type="file" id="id_photo" required="required" name="postimg">
+                    </p>
+
+                    <p>
+                        <textarea name="content" id="text_field" cols="50" rows="5" placeholder="140자 까지 등록 가능합니다."></textarea>
+                    </p>
+                    <p>
+                        <textarea name="hashtag" cols="50" rows="1" placeholder="해시태그를 입력해주세요. Ex) #Insta"></textarea>
+                    </p>
+<!--                    <input class="submit_btn" type="submit" value="저장">-->
+                    <button type="button" class="submit_btn" onclick="save()">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<script>
+    let fileInput  = document.querySelector("#id_photo");
+    // Show image
+    fileInput.addEventListener('change', handleImage, false);
+    let canvas = document.getElementById('imageCanvas');
+    let ctx = canvas.getContext('2d');
+    let imageinfo;
+
+    $("#input-file-trigger").click(function(e){
+        e.preventDefault();
+        $("#id_photo").click();
+    });
+
+    function handleImage(e){
+        let reader = new FileReader();
+        reader.onload = function(event){
+            let img = new Image();
+            // var imgWidth =
+            img.onload = function(){
+                canvas.width = 300;
+                canvas.height = 300;
+                // ctx.drawImage(img,0,0,300,300);
+                ctx.drawImage(img,0,0,300,300);
+            };
+            img.src = event.target.result;
+            // img.width = img.width*0.5
+            // canvas.height = img.height;
+        };
+        imageinfo = e.target.files[0];
+        reader.readAsDataURL(e.target.files[0]);
+    }
+
+    let save = () => {
+        // let imageurl = canvas.toDataURL('image/png');
+        // let blobBin = atob(imageurl.split(',')[1]);
+        // let array = [];
+        // let blobBin = atob(imageurl.split(',')[1]);
+        // let array = [];
+        // for(let i = 0; i < blobBin.length; i++){
+        //     array.push(blobBin.charCodeAt(i));
+        // }
+        // let file = new Blob([new Uint8Array(array)], {type: 'image/png'});
+        let formdata = new FormData();
+        formdata.append("file",imageinfo);
+        $.ajax({
+            type: 'post',
+            url: '/post.Imageaction',
+            data: formdata,
+            processData: false,
+            contentType: false,
+        }).done(function(data){
+            if(data === true){
+                $(".post_form").submit();
+            }
+        });
+    }
+</script>
+</body>
+</html>
