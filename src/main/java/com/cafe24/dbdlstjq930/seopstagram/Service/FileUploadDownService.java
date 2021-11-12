@@ -4,6 +4,7 @@ package com.cafe24.dbdlstjq930.seopstagram.Service;
 import com.cafe24.dbdlstjq930.seopstagram.Exception.FileDownloadException;
 import com.cafe24.dbdlstjq930.seopstagram.Exception.FileUploadException;
 import com.cafe24.dbdlstjq930.seopstagram.Properties.FileUploadProperties;
+import lombok.extern.java.Log;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
+@Log
 public class FileUploadDownService {
     private final Path fileLocation;
 
@@ -48,9 +50,11 @@ public class FileUploadDownService {
         }
     }
 
-    public Resource loadFileAsResource(String fileName) {
+    public Resource loadFileAsResource(String middlePath, String fileName) {
+        Path fullPath = Paths.get(this.fileLocation.toString(), middlePath);
         try {
-            Path filePath = this.fileLocation.resolve(fileName).normalize();
+//            Path filePath = this.fileLocation.resolve(fileName).normalize();
+            Path filePath = fullPath.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
             if(resource.exists()) {

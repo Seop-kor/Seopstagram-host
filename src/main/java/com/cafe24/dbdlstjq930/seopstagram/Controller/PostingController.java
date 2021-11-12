@@ -59,7 +59,7 @@ public class PostingController {
         String fileName = fileUploadDownService.storeFile(file, "post");
 
         fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/imgs/post/")
+                .path("/imageFile/post/")
                 .path(fileName)
                 .toUriString();
         return true;

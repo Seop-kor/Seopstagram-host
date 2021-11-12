@@ -29,7 +29,7 @@ public class MemberService {
         memberDTO.setUserpass(passwordEncoder.encode(memberDTO.getUserpass()));
         memberDTO.setUsernick(memberDTO.getUserid());
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/imgs/profile/")
+                .path("/imageFile/profile/")
                 .path("defaultimage.png")
                 .toUriString();
         memberDTO.setUserprofileimg(fileDownloadUri);
