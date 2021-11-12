@@ -22,7 +22,7 @@ public class ImageDownloadController {
 
     @GetMapping("/imageFile/{fileMiddlePath}/{fileName:.+}")
     public ResponseEntity<Resource> download(@PathVariable("fileMiddlePath")String middlePath, @PathVariable("fileName")String fileName, HttpServletRequest request) throws Exception{
-        Resource resource = fileUploadDownService.loadFileAsResource(fileName);
+        Resource resource = fileUploadDownService.loadFileAsResource(middlePath, fileName);
         String contentType = null;
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
